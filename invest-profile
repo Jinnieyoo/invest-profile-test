@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>투자 성향 테스트</title>
+  <style>
+    body { font-family: sans-serif; padding: 20px; max-width: 600px; margin: auto; }
+    h1 { text-align: center; }
+    .question { margin-bottom: 30px; }
+    button { display: block; margin: 10px 0; padding: 10px; width: 100%; font-size: 16px; }
+    .result { font-weight: bold; font-size: 20px; color: #333; text-align: center; margin-top: 30px; }
+  </style>
+</head>
+<body>
+  <h1>투자 성향 테스트</h1>
+  <div id="quiz"></div>
+  <div class="result" id="result"></div>
+
+  <script>
+    const questions = [
+      {
+        text: "Q1. 주식 가격이 갑자기 10% 하락하면, 어떻게 하시겠습니까?",
+        choices: ["바로 팔아서 손실 줄이기", "시장 회복을 믿고 보유", "더 떨어지면 추가 매수"]
+      },
+      {
+        text: "Q2. 주식에 투자하는 목적은 무엇인가요?",
+        choices: ["1년 이내의 단기 수익", "5년 이상 장기적 성장기대", "주식 상승 때마다 단기차익"]
+      },
+      {
+        text: "Q3. 목표 수익률은?",
+        choices: ["5%이하의 안정적 수익", "10%~15% 수익 목표", "20% 이상 수익 추구"]
+      },
+      {
+        text: "Q4. 경제 불안정 시 어떻게 대응하시겠습니까?",
+        choices: ["주식 매도 후 현금 보유", "시장 회복 믿고 투자", "하락 시 추가 매수"]
+      },
+      {
+        text: "Q5. 주식 투자 경험은?",
+        choices: ["잘 모르고 처음 투자해본다", "몇 번 투자 경험 있음", "주식 전문가 수준"]
+      },
+    ];
+
+    const scoreMap = {
+      "바로 팔아서 손실 줄이기": 1,
+      "시장 회복을 믿고 보유": 2,
+      "더 떨어지면 추가 매수": 3,
+      "1년 이내의 단기 수익": 1,
+      "5년 이상 장기적 성장기대": 2,
+      "주식 상승 때마다 단기차익": 3,
+      "5%이하의 안정적 수익": 1,
+      "10%~15% 수익 목표": 2,
+      "20% 이상 수익 추구": 3,
+      "주식 매도 후 현금 보유": 1,
+      "시장 회복 믿고 투자": 2,
+      "하락 시 추가 매수": 3,
+      "잘 모르고 처음 투자해본다": 1,
+      "몇 번 투자 경험 있음": 2,
+      "주식 전문가 수준": 3
+    };
+
+    let current = 0;
+    let score = 0;
+
+    function showQuestion() {
+      const container = document.getElementById("quiz");
+      container.innerHTML = "";
+
+      if (current >= questions.length) {
+        let result = "";
+        if (score <= 7) result = "🔵 당신은 안정형 투자자입니다.";
+        else if (score <= 11) result = "🟡 당신은 중립형 투자자입니다.";
+        else result = "🔴 당신은 공격형 투자자입니다.";
+
+        document.getElementById("result").textContent = result;
+        return;
+      }
+
+      const q = questions[current];
+      const div = document.createElement("div");
+      div.className = "question";
+      div.innerHTML = `<h3>${q.text}</h3>`;
+      q.choices.forEach(choice => {
+        const btn = document.createElement("button");
+        btn.textContent = choice;
+        btn.onclick = () => {
+          score += scoreMap[choice];
+          current++;
+          showQuestion();
+        };
+        div.appendChild(btn);
+      });
+      container.appendChild(div);
+    }
+
+    showQuestion();
+  </script>
+</body>
+</html>
